@@ -1,6 +1,126 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+  <head><!DOCTYPE html>
+<html lang="zh-CN">
   <head>
+    <meta charset="UTF-8">
+    <title>慧慧家酒</title>
+	<style>
+		/* 设置图片容器的样式 */
+		.image-container {
+			overflow-x: scroll;
+			white-space: nowrap;
+			width: 80%;
+			margin: 0 auto;
+		}
+
+		/* 设置每张图片的样式 */
+		.image-container img {
+			display: inline-block;
+			width: 200px;
+			height: 200px;
+			object-fit: cover;
+			margin-right: 10px;
+		}
+	</style>
+  </head>
+  <body>
+    <header>
+	<h1>红酒商店</h1>
+	<div class="image-container">
+		<img src="https://picsum.photos/200/200?random=1">
+		<img src="https://picsum.photos/200/200?random=2">
+		<img src="https://picsum.photos/200/200?random=3">
+		<img src="https://picsum.photos/200/200?random=4">
+		<img src="https://picsum.photos/200/200?random=5">
+		<img src="https://picsum.photos/200/200?random=6">
+		<img src="https://picsum.photos/200/200?random=7">
+		<img src="https://picsum.photos/200/200?random=8">
+		<img src="https://picsum.photos/200/200?random=9">
+		<img src="https://picsum.photos/200/200?random=10">
+	</div>
+      <nav>
+        <ul>
+          <li><a href="#">主页</a></li>
+          <li><a href="#">关于我们</a></li>
+          <li><a href="#">葡萄酒</a></li>
+          <li><a href="#">联系我们</a></li>
+        </ul>
+      </nav>
+    </header>
+    <hr>
+	<p>请输入您的姓名：</p>
+	<input type="text" id="name">
+	<button onclick="greet()">问候</button>
+	<div id="chatbox"></div>
+    
+    <section class="hero">
+      <img src="https://via.placeholder.com/800x400" alt="红酒">
+      <h1>发现我们酿造的最佳红酒</h1>
+    </section>
+    
+    <section class="products">
+      <div class="product">
+        <img src="https://via.placeholder.com/300x300" alt="红酒">
+        <h2>黔王金奖酒</h2>
+        <p>黔王金奖酒是中国贵州茅台酒厂生产的一款高档酒品。它以优质的高粱、大米和天然泉水为原料，采用传统的酿造工艺和长期陈放的方法制成。这种酒体色泽透亮，香气浓郁，入口绵柔、回味悠长，口感醇厚。黔王金奖酒是茅台酒厂的一种稀有酒品，每年的产量都非常有限。因此，它备受酒类收藏家的追捧，并被誉为中国高端白酒中的珍品之一。
+
+黔王金奖酒的酒瓶设计也非常精美，瓶身呈现优雅的圆柱形状，瓶身正面有黔王金奖的标志，背面则有茅台酒厂的标志，整体感觉高贵典雅。如果您想品尝一款高档的中国白酒，黔王金奖酒绝对是一个不错的选择。</p>
+        <a href="#">立即购买</a>
+      </div>
+
+      <div class="product">
+        <img src="https://via.placeholder.com/300x300" alt="红酒">
+        <h2>红酒</h2>
+        <p>我们的红酒是由葡萄园中最好的葡萄酿造而成的。它有浓郁的味道，带有黑莓和巧克力的香气。</p>
+        <a href="#">立即购买</a>
+      </div>
+      
+      <div class="product">
+        <img src="https://via.placeholder.com/300x300" alt="白葡萄酒">
+        <h2>白葡萄酒</h2>
+        <p>我们的白葡萄酒是由葡萄园中最新鲜的葡萄酿造而成的。它有清新的味道，带有柑橘和梨子的香气。</p>
+        <a href="#">立即购买</a>
+      </div>
+    </section>
+    
+    <section class="contact">
+      <h2>联系我们</h2>
+      <form>
+        <label for="name">姓名</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="email">电子邮件</label>
+        <input type="email" id="email" name="email" required>
+        
+        <label for="message">留言</label>
+        <textarea id="message" name="message" required></textarea>
+        
+        <button type="submit">提交</button>
+      </form>
+    </section>
+    
+    <footer>
+      <p>&copy; 2023 红酒商店.版权所有。</p>
+      <ul>
+        <li><a href="#">隐私政策</a></li>
+        <li><a href="#">条款和条件</a></li>
+        <li><a href="#">社交</a></li>
+      </ul>
+</body>
+
+	<script>
+		function greet() {
+			// 获取用户输入的姓名
+			var name = document.getElementById("name").value;
+			
+			// 构造问候信息
+			var message = "你好，" + name + "！有什么我可以帮助你的吗？";
+			
+			// 在聊天框中显示问候信息
+			document.getElementById("chatbox").innerHTML = message;
+		}
+	</script>
     <meta charset="UTF-8">
     <title>慧慧家酒</title>
     <style>
