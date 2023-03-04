@@ -19,6 +19,11 @@
         </ul>
       </nav>
     </header>
+    <hr>
+	<p>请输入您的姓名：</p>
+	<input type="text" id="name">
+	<button onclick="greet()">问候</button>
+	<div id="chatbox"></div>
     
     <section class="hero">
       <img src="https://via.placeholder.com/800x400" alt="红酒">
@@ -27,7 +32,7 @@
     
     <section class="products">
       <div class="product">
-        <img src="./Image1.png" alt="黔王金奖酒">
+        <img src="https://via.placeholder.com/300x300" alt="红酒">
         <h2>黔王金奖酒</h2>
         <p>黔王金奖酒是中国贵州茅台酒厂生产的一款高档酒品。它以优质的高粱、大米和天然泉水为原料，采用传统的酿造工艺和长期陈放的方法制成。这种酒体色泽透亮，香气浓郁，入口绵柔、回味悠长，口感醇厚。黔王金奖酒是茅台酒厂的一种稀有酒品，每年的产量都非常有限。因此，它备受酒类收藏家的追捧，并被誉为中国高端白酒中的珍品之一。
 
@@ -71,4 +76,19 @@
       <ul>
         <li><a href="#">隐私政策</a></li>
         <li><a href="#">条款和条件</a></li>
-        <li><a href="#">社交
+        <li><a href="#">社交</a></li>
+      </ul>
+</body>
+
+	<script>
+		function greet() {
+			// 获取用户输入的姓名
+			var name = document.getElementById("name").value;
+			
+			// 构造问候信息
+			var message = "你好，" + name + "！有什么我可以帮助你的吗？";
+			
+			// 在聊天框中显示问候信息
+			document.getElementById("chatbox").innerHTML = message;
+		}
+	</script>
