@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>随机成语生成器</title>
+	<meta charset="UTF-8">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+			margin-top: 50px;
+		}
+		
+		h1 {
+			font-size: 36px;
+			margin-bottom: 30px;
+		}
+		
+		.button {
+			background-color: #4CAF50;
+			color: white;
+			padding: 10px 20px;
+			border-radius: 5px;
+			font-size: 16px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+		
+		.button:hover {
+			background-color: #3e8e41;
+		}
+	</style>
+</head>
+<body>
+	<h1>随机成语生成器</h1>
+	<p id="idiom"></p>
+	<button class="button" onclick="generateIdiom()">生成</button>
+
+	<script>
+		// 定义一个数组存放成语
+		const idioms = [
+			"一马当先",
+			"三心二意",
+			"四面楚歌",
+			"五光十色",
+			"六神无主",
+			"七嘴八舌",
+			"八仙过海",
+			"九牛二虎之力",
+			"十年生死两茫茫"
+		];
+
+		// 生成随机成语
+		function generateIdiom() {
+			const randomIndex = Math.floor(Math.random() * idioms.length);
+			const idiom = idioms[randomIndex];
+			document.getElementById("idiom").innerHTML = idiom;
+		}
+	</script>
+</body>
+</html>
