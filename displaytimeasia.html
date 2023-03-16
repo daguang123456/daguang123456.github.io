@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="utf-8">
+    <title>亚洲国家当前时间</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1>亚洲国家当前时间</h1>
+    <table>
+      <tr>
+        <th>国家</th>
+        <th>当前时间</th>
+      </tr>
+      <tr>
+        <td>中国</td>
+        <td id="china"></td>
+      </tr>
+      <tr>
+        <td>日本</td>
+        <td id="japan"></td>
+      </tr>
+      <tr>
+        <td>韩国</td>
+        <td id="korea"></td>
+      </tr>
+      <tr>
+        <td>印度</td>
+        <td id="india"></td>
+      </tr>
+      <tr>
+        <td>新加坡</td>
+        <td id="singapore"></td>
+      </tr>
+    </table>
+    <script>
+      function updateTime() {
+        var china = new Date().toLocaleString('zh-CN', {timeZone: 'Asia/Shanghai'});
+        var japan = new Date().toLocaleString('ja-JP', {timeZone: 'Asia/Tokyo'});
+        var korea = new Date().toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'});
+        var india = new Date().toLocaleString('en-IN', {timeZone: 'Asia/Kolkata'});
+        var singapore = new Date().toLocaleString('en-SG', {timeZone: 'Asia/Singapore'});
+        $('#china').text(china);
+        $('#japan').text(japan);
+        $('#korea').text(korea);
+        $('#india').text(india);
+        $('#singapore').text(singapore);
+      }
+      $(document).ready(function() {
+        updateTime();
+        setInterval(updateTime, 1000); // 每秒更新一次时间
+      });
+    </script>
+  </body>
+</html>
