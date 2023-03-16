@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>中国日出日落时间</title>
+</head>
+<body>
+	<h1>中国日出日落时间</h1>
+	<h2>云南</h2>
+	<p>当前日出时间是：<span id="yunnanSunrise"></span></p>
+	<p>当前日落时间是：<span id="yunnanSunset"></span></p>
+	<h2>贵州</h2>
+	<p>当前日出时间是：<span id="guizhouSunrise"></span></p>
+	<p>当前日落时间是：<span id="guizhouSunset"></span></p>
+	<h2>北京</h2>
+	<p>当前日出时间是：<span id="beijingSunrise"></span></p>
+	<p>当前日落时间是：<span id="beijingSunset"></span></p>
+	<h2>新疆</h2>
+	<p>当前日出时间是：<span id="xinjiangSunrise"></span></p>
+	<p>当前日落时间是：<span id="xinjiangSunset"></span></p>
+
+	<script>
+		function getSunriseSunset(lat, lng, cityName) {
+			var url = `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&formatted=0`;
+			fetch(url)
+				.then(response => response.json())
+				.then(data => {
+					var sunriseTime = new Date(data.results.sunrise).toLocaleTimeString('zh-CN', {hour12: false});
+					var sunsetTime = new Date(data.results.sunset).toLocaleTimeString('zh-CN', {hour12: false});
+					document.getElementById(`${cityName}Sunrise`).innerHTML = sunriseTime;
+					document.getElementById(`${cityName}Sunset`).innerHTML = sunsetTime;
+				})
+				.catch(error => console.error(error));
+		}
+
+		getSunriseSunset(24.9740, 101.4870, 'yunnan'); // Yunnan's latitude and longitude
+		getSunriseSunset(27.6819, 106.0614, 'guizhou'); // Guizhou's latitude and longitude
+		getSunriseSunset(39.9042, 116.4074, 'beijing'); // Beijing's latitude and longitude
+		getSunriseSunset(42.0353, 87.3237, 'xinjiang'); // Xinjiang's latitude and longitude
+
+
+	</script>
+</body>
+</html>
