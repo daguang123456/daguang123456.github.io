@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>单位转换器</title>
+</head>
+<body>
+    <h1>单位转换器</h1>
+    <form>
+        <label for="input-value">输入值：</label>
+        <input type="number" id="input-value" name="input-value">
+        <br>
+        <label for="input-unit">输入单位：</label>
+        <select id="input-unit" name="input-unit">
+            <option value="米">米</option>
+            <option value="英尺">英尺</option>
+            <option value="千克">千克</option>
+            <option value="磅">磅</option>
+            <option value="厘米">厘米</option>
+            <option value="英寸">英寸</option>
+        </select>
+        <br>
+        <label for="output-unit">输出单位：</label>
+        <select id="output-unit" name="output-unit">
+            <option value="米">米</option>
+            <option value="英尺">英尺</option>
+            <option value="千克">千克</option>
+            <option value="磅">磅</option>
+            <option value="厘米">厘米</option>
+            <option value="英寸">英寸</option>
+        </select>
+        <br>
+        <input type="button" value="转换" onclick="convert()">
+    </form>
+    <div id="output-value"></div>
+    <script>
+        function convert() {
+            const inputValue = document.getElementById("input-value").value;
+            const inputUnit = document.getElementById("input-unit").value;
+            const outputUnit = document.getElementById("output-unit").value;
+            let outputValue;
+            if (inputUnit === "米" && outputUnit === "英尺") {
+                outputValue = inputValue * 3.28084;
+            } else if (inputUnit === "英尺" && outputUnit === "米") {
+                outputValue = inputValue / 3.28084;
+            } else if (inputUnit === "千克" && outputUnit === "磅") {
+                outputValue = inputValue * 2.20462;
+            } else if (inputUnit === "磅" && outputUnit === "千克") {
+                outputValue = inputValue / 2.20462;
+            } else if (inputUnit === "厘米" && outputUnit === "英寸") {
+                outputValue = inputValue * 0.393701;
+            } else if (inputUnit === "英寸" && outputUnit === "厘米") {
+                outputValue = inputValue / 0.393701;
+            }
+            document.getElementById("output-value").innerHTML = outputValue + outputUnit;
+        }
+    </script>
+</body>
+</html>
