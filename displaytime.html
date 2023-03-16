@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>世界时钟</title>
+</head>
+<body>
+    <h1>世界时钟</h1>
+    <form>
+        <label for="country-select">选择国家：</label>
+        <select id="country-select" name="country-select">
+            <option value="中国">中国</option>
+            <option value="美国">美国</option>
+            <option value="英国">英国</option>
+            <option value="法国">法国</option>
+            <option value="日本">日本</option>
+            <option value="澳大利亚">澳大利亚</option>
+        </select>
+        <br>
+        <input type="button" value="显示时间" onclick="displayTime()">
+    </form>
+    <div id="time-display"></div>
+    <script>
+        function displayTime() {
+            const country = document.getElementById("country-select").value;
+            let time;
+            switch (country) {
+                case "中国":
+                    time = new Date().toLocaleString("zh-CN", {timeZone: "Asia/Shanghai"});
+                    break;
+                case "美国":
+                    time = new Date().toLocaleString("zh-CN", {timeZone: "America/New_York"});
+                    break;
+                case "英国":
+                    time = new Date().toLocaleString("zh-CN", {timeZone: "Europe/London"});
+                    break;
+                case "法国":
+                    time = new Date().toLocaleString("zh-CN", {timeZone: "Europe/Paris"});
+                    break;
+                case "日本":
+                    time = new Date().toLocaleString("zh-CN", {timeZone: "Asia/Tokyo"});
+                    break;
+                case "澳大利亚":
+                    time = new Date().toLocaleString("zh-CN", {timeZone: "Australia/Sydney"});
+                    break;
+                default:
+                    time = "未知";
+                    break;
+            }
+            document.getElementById("time-display").innerHTML = country + " 的当前时间是：" + time;
+        }
+    </script>
+</body>
+</html>
