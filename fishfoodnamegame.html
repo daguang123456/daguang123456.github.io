@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>鱼食命名游戏</title>
+	<meta charset="UTF-8">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+		}
+		h1 {
+			text-align: center;
+		}
+		#fish {
+			width: 300px;
+			height: 200px;
+			background-color: #87CEEB;
+			border: 1px solid black;
+			margin: 0 auto;
+			text-align: center;
+			padding-top: 80px;
+			font-size: 30px;
+			color: white;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<h1>鱼食命名游戏</h1>
+	<p>点击下面的鱼，生成一个随机的鱼食名称！</p>
+	<div id="fish" onclick="generateName()">点击这里</div>
+	<script>
+		function generateName() {
+			var adjectives = ["美味的", "新鲜的", "营养丰富的", "口感酥脆的", "健康的"];
+			var foods = ["虫子", "小鱼干", "海藻", "蚯蚓", "蝦米"];
+			var randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+			var randomFood = foods[Math.floor(Math.random() * foods.length)];
+			var name = randomAdjective + randomFood;
+			document.getElementById("fish").innerHTML = name;
+		}
+	</script>
+</body>
+</html>
