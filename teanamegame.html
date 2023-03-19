@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>茶叶命名游戏</title>
+	<meta charset="UTF-8">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+		}
+		h1 {
+			text-align: center;
+		}
+		#tea {
+			width: 300px;
+			height: 200px;
+			background-color: #C3B091;
+			border: 1px solid black;
+			margin: 0 auto;
+			text-align: center;
+			padding-top: 80px;
+			font-size: 30px;
+			color: white;
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<h1>茶叶命名游戏</h1>
+	<p>点击下面的茶杯，生成一个随机的茶叶名称！</p>
+	<div id="tea" onclick="generateName()">点击这里</div>
+	<script>
+		function generateName() {
+			var adjectives = ["清香的", "浓郁的", "芳香的", "甜美的", "爽口的"];
+			var teas = ["绿茶", "红茶", "乌龙茶", "普洱茶", "龙井茶"];
+			var randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+			var randomTea = teas[Math.floor(Math.random() * teas.length)];
+			var name = randomAdjective + randomTea;
+			document.getElementById("tea").innerHTML = name;
+		}
+	</script>
+</body>
+</html>
