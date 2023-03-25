@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Maximum Matching with vis-network</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: Arial, sans-serif;
+			background-color: #f2f2f2;
+		}
+		header {
+			background-color: #333;
+			color: white;
+			text-align: center;
+			padding: 15px;
+		}
+		h1 {
+			margin: 20px;
+			text-align: center;
+		}
+		.container {
+			margin: 20px auto;
+			max-width: 1000px;
+			text-align: center;
+			position: relative;
+		}
+		#network {
+			width: 100%;
+			height: 300px;
+			margin-bottom: 20px;
+			border: 1px solid #ccc;
+			background-color: white;
+		}
+		#results {
+			margin-top: 20px;
+			font-size: 18px;
+			font-weight: bold;
+		}
+		button {
+			background-color: #333;
+			color: white;
+			border: none;
+			border-radius: 4px;
+			padding: 10px 20px;
+			font-size: 16px;
+			cursor: pointer;
+		}
+	</style>
+	<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+	<header>
+		<h1>Maximum Matching with vis-network</h1>
+	</header>
+	<div class="container">
+		<div id="network"></div>
+		<button onclick="computeMatching()">Compute Maximum Matching</button>
+		<div id="results"></div>
+	</div>
+	
+	<script>
+		var nodes = new vis.DataSet();
+		var edges = new vis.DataSet();
+		var network = new vis.Network(
+			document.getElementById("network"),
+			{
+				nodes: nodes,
+				edges: edges
+			},
+			{
+				manipulation: {
+					enabled: true,
+					addNode: function(nodeData, callback) {
+						nodeData.id = nodes.length + 1;
+						var label = prompt("Enter node label:", "Node " + nodeData.id);
+						if (label !== null) {
+							nodeData.label = label;
+							nodes.add(nodeData);
+							callback(nodeData);
+						}
+					},
+					addEdge: function(edgeData, callback) {
+						if (edgeData.from == edgeData.to) {
+							alert("Cannot create self-loop edge.");
+							return;
+						}
+						if (edges.get({
+							filter: function(edge) {
+								return edge.from == edgeData.from && edge.to == edgeData.to;
+							}
+						}).length > 0) {
+							alert("Edge already exists.");
+							return;
+						}
+						edgeData.id = edges.length + 1;
+						edges.add(edgeData);
+						callback(edgeData);
+					},
+					deleteNode: function(nodeData, callback) {
+						edges.remove({
+							filter: function(edge) {
+								return edge.from == nodeData.nodes[0] || edge.to == nodeData.nodes[0];
+							}
+						});
+						nodes.remove(nodeData.nodes[0]);
+						callback(nodeData);
+					},
+					deleteEdge: function(edgeData, callback) {
+						edges.remove(edgeData.edges[0]);
+						callback(edgeData);
+					}
+				},
+				layout: {
+					improvedLayout: false
+				},
+				edges: {
+					width: 1,
+					smooth: {
+						enabled: true,
+						type: 'dynamic',
+						roundness: 0.5
+					}
+				},
+				nodes: {
+					labelHighlightBold: false
+				},
+				interaction: {
+					hover: true,
+					navigationButtons: true,
+					keyboard: true,
+					zoomView: true,
+					dragView: true
+				}
+			}
+		);
+		
+		function computeMatching() {
+			var adjacencyMatrix = new Array(nodes.length);
+			for (var i = 0; i < nodes.length; i++) {
+				adjacencyMatrix[i] = new Array(nodes.length);
+				for (var j = 0; j < nodes.length; j++) {
+					if (i == j) {
+						adjacencyMatrix[i][j] = 0;
+					} else {
+						var edgesBetweenNodes = edges.get({
+							filter: function(edge) {
+								return (edge.from == nodes.get(i+1).id && edge.to == nodes.get(j+1).id)
+									   || (edge.from == nodes.get(j+1).id && edge.to == nodes.get(i+1).id);
+							}
+						});
+						if (edgesBetweenNodes.length > 0) {
+							adjacencyMatrix[i][j] = 1;
+						} else {
+							adjacencyMatrix[i][j] = 0;
+						}
+					}
+				}
+			}
+			var matching = findMaximumMatching(adjacencyMatrix);
+			var results = document.getElementById("results");
+			results.innerHTML = "Maximum matching: " + JSON.stringify(matching);
+		}
+		
+		function findMaximumMatching(adjacencyMatrix) {
+			var n = adjacencyMatrix.length;
+			var used = new Array(n).fill(false);
+			var match = new Array(n).fill(-1);
+			var augmentPath = function(v) {
+				used[v] = true;
+				for (var u = 0; u < n; u++) {
+					if (!used[u] && adjacencyMatrix[v][u]) {
+						used[u] = true;
+						if (match[u] == -1 || augmentPath(match[u])) {
+							match[u] = v;
+							return true;
+						}
+					}
+				}
+				return false;
+			};
+			for (var v = 0; v < n; v++) {
+				if (match[v] == -1) {
+					used.fill(false);
+					augmentPath(v);
+				}
+			}
+			var matching = {};
+			for (var u = 0; u < n; u++) {
+				if (match[u] != -1) {
+					matching[nodes.get(u+1).label] = nodes.get(match[u]+1).label;
+				}
+			}
+			return matching;
+		}
+	</script>
+	
+</body>
+</html>
+
