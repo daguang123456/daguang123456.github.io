@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二次剩余模n计算器</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>二次剩余模n计算器</h1>
+    <p>请输入一个正整数n：</p>
+    <input id="inputNumber" type="number" min="1" placeholder="输入一个正整数n" />
+    <button onclick="computeQuadraticResidues()">计算二次剩余</button>
+    <p id="result"></p>
+    <canvas id="quadraticResiduesChart"></canvas>
+
+    <script>
+let chart;
+
+function computeQuadraticResidues() {
+    let n = parseInt(document.getElementById("inputNumber").value);
+    let residues = new Set();
+    for (let i = 0; i < n; i++) {
+        let residue = (i * i) % n;
+        residues.add(residue);
+    }
+
+    let residuesArray = Array.from(residues);
+    residuesArray.sort((a, b) => a - b);
+    let result = '二次剩余模' + n + '：[' + residuesArray.join(', ') + ']';
+    document.getElementById("result").textContent = result;
+
+    updateChart(n, residues.size);
+}
+
+function updateChart(n, numberOfQuadraticResidues) {
+    if (chart) {
+        chart.destroy();
+    }
+
+    let ctx = document.getElementById('quadraticResiduesChart').getContext('2d');
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: Array.from({ length: n }, (_, i) => i + 1),
+            datasets: [{
+                label: '二次剩余数量',
+                data: Array.from({ length: n }, (_, i) => {
+                    let residues = new Set();
+                    for (let j = 0; j <= i + 1; j++) {
+                        let residue = (j * j) % (i + 1);
+                        residues.add(residue);
+                    }
+                    return residues.size;
+                }),
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'n'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: '二次剩余数量'
+                    },
+                    min: 0
+                }
+            }
+        }
+    });
+}
+    </script>
+</body>
+</html>
+
+
