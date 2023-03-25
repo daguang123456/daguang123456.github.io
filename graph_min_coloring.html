@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Minimum Vertex Coloring with vis-network</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			font-family: Arial, sans-serif;
+			background-color: #f2f2f2;
+		}
+		header {
+			background-color: #333;
+			color: white;
+			text-align: center;
+			padding: 15px;
+		}
+		h1 {
+			margin: 20px;
+			text-align: center;
+		}
+		.container {
+			margin: 20px auto;
+			max-width: 1000px;
+			text-align: center;
+			position: relative;
+		}
+		#network {
+			width: 100%;
+			height: 300px;
+			margin-bottom: 20px;
+			border: 1px solid #ccc;
+			background-color: white;
+		}
+		#results {
+			margin-top: 20px;
+			font-size: 18px;
+			font-weight: bold;
+		}
+		button {
+			background-color: #333;
+			color: white;
+			border: none;
+			border-radius: 4px;
+			padding: 10px 20px;
+			font-size: 16px;
+			cursor: pointer;
+		}
+	</style>
+	<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+	<header>
+		<h1>Minimum Vertex Coloring with vis-network</h1>
+	</header>
+	<div class="container">
+		<div id="network"></div>
+		<button onclick="computeColoring()">Compute Minimum Vertex Coloring</button>
+		<div id="results"></div>
+	</div>
+	
+	<script>
+		var nodes = new vis.DataSet();
+		var edges = new vis.DataSet();
+		var network = new vis.Network(
+			document.getElementById("network"),
+			{
+				nodes: nodes,
+				edges: edges
+			},
+			{
+				manipulation: {
+					enabled: true,
+					addNode: function(nodeData, callback) {
+						nodeData.id = nodes.length + 1;
+						var label = prompt("Enter node label:", "Node " + nodeData.id);
+						if (label !== null) {
+							nodeData.label = label;
+							nodes.add(nodeData);
+							callback(nodeData);
+						}
+					},
+					addEdge: function(edgeData, callback) {
+						if (edgeData.from == edgeData.to) {
+							alert("Cannot create self-loop edge.");
+							return;
+						}
+						if (edges.get({
+							filter: function(edge) {
+								return edge.from == edgeData.from && edge.to == edgeData.to;
+							}
+						}).length > 0) {
+							alert("Edge already exists.");
+							return;
+						}
+						edgeData.id = edges.length + 1;
+						edges.add(edgeData);
+						callback(edgeData);
+					},
+					deleteNode: function(nodeData, callback) {
+						edges.remove({
+							filter: function(edge) {
+								return edge.from == nodeData.nodes[0] || edge.to == nodeData.nodes[0];
+							}
+						});
+						nodes.remove(nodeData.nodes[0]);
+						callback(nodeData);
+					},
+					deleteEdge: function(edgeData, callback) {
+						edges.remove(edgeData.edges[0]);
+						callback(edgeData);
+					}
+				},
+				layout: {
+					improvedLayout: false
+				},
+				edges: {
+					width: 1,
+					smooth: {
+						enabled: true,
+						type: 'dynamic',
+						roundness: 0.5
+					}
+				},
+				nodes: {
+					labelHighlightBold: false
+				},
+				interaction: {
+					hover: true,
+					navigationButtons: true,
+					keyboard: true,
+					zoomView: true,
+					dragView: true
+				}
+			}
+		);
+		
+		function computeColoring() {
+			var adjacencyMatrix = new Array(nodes.length);
+			for (var i = 0; i < nodes.length; i++) {
+				adjacencyMatrix[i] = new Array(nodes.length);
+				for (var j = 0; j < nodes.length; j++) {
+					if (i == j) {
+						adjacencyMatrix[i][j] = 0;
+					} else {
+						var edgesBetweenNodes = edges.get({
+							filter: function(edge) {
+								return (edge.from == nodes.get(i+1).id && edge.to == nodes.get(j+1).id)
+									   || (edge.from == nodes.get(j+1).id && edge.to == nodes.get(i+1).id);
+							}
+						});
+						if (edgesBetweenNodes.length > 0) {
+							adjacencyMatrix[i][j] = 1;
+						} else {
+							adjacencyMatrix[i][j] = 0;
+						}
+					}
+				}
+			}
+			var coloring = findMinimumVertexColoring(adjacencyMatrix);
+			var results = document.getElementById("results");
+			results.innerHTML = "Minimum vertex coloring: " + JSON.stringify(coloring);
+			colorNodes(coloring);
+		}
+		
+		function findMinimumVertexColoring(adjacencyMatrix) {
+			var n = adjacencyMatrix.length;
+			var colors = new Array(n).fill(-1);
+			var availableColors = new Array(n).fill(true);
+			for (var v = 0; v < n; v++) {
+				var neighbors = getNeighbors(v, adjacencyMatrix);
+				for (var i = 0; i < neighbors.length; i++) {
+					if (colors[neighbors[i]] != -1) {
+						availableColors[colors[neighbors[i]]] = false;
+					}
+				}
+				for (var c = 0; c < n; c++) {
+					if (availableColors[c]) {
+						colors[v] = c;
+						break;
+					}
+				}
+				for (var i = 0; i < neighbors.length; i++) {
+					if (colors[neighbors[i]] != -1) {
+						availableColors[colors[neighbors[i]]] = true;
+					}
+				}
+			}
+			return colors;
+		}
+		
+		function getNeighbors(v, adjacencyMatrix) {
+			var neighbors = [];
+			for (var i = 0; i < adjacencyMatrix[v].length; i++) {
+				if (adjacencyMatrix[v][i] == 1) {
+					neighbors.push(i);
+				}
+			}
+			return neighbors;
+		}
+		
+		function colorNodes(coloring) {
+			nodes.forEach(function(node) {
+				node.color = {
+					background: getColor(coloring[node.id-1])
+				};
+			});
+			network.setData({
+				nodes: nodes,
+				edges: edges
+			});
+		}
+		
+		function getColor(index) {
+			var colors = [
+				"#1f77b4",
+				"#ff7f0e",
+				"#2ca02c",
+				"#d62728",
+				"#9467bd",
+				"#8c564b",
+				"#e377c2",
+				"#7f7f7f",
+				"#bcbd22",
+				"#17becf"
+			];
+			return colors[index % colors.length];
+		}
+	</script>
+</body>
+</html>
+
