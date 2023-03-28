@@ -94,7 +94,8 @@
 				return -1;
 			}
 
-
+        console.log(sl);
+        console.log(sw);
 	jsdomath = pyscript.interpreter.globals.get('irisprediciton');
 	console.log(jsdomath(sl,sw,pl,pw));
 	document.getElementById("tagMessage").innerHTML= jsdomath(sl,sw,pl,pw)[0] +" "+jsdomath(sl,sw,pl,pw)[1];
