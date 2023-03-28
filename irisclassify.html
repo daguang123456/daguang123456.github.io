@@ -1,82 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
 
-    <title>Exporting all Global Python Objects</title>
+	<title>Exporting all Global Python Objects</title>
 
-    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+	<link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
 
-    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+	<script defer src="https://pyscript.net/latest/pyscript.js"></script>
   </head>
 
   <body>
   	 <label for="tagInitTime">萼片长度</label><br>
-    <input type="number" id = "tagInitTime" step="0.01" class="numbersonly" value="3"><br>
-    <label for="tagEndTime">萼片宽度</label><br>
-    <input type="number" id = "tagEndTime" step="0.01" class="numbersonly" value="3"><br>
-    <label for="pl">花瓣长度</label><br>
-    <input type="number" id = "pl" step="0.01" class="numbersonly" value="3"><br>
-    <label for="pw">花瓣宽度</label><br>
-    <input type="number" id = "pw" step="0.01" class="numbersonly" value="3"><br>
+	<input type="number" id = "tagInitTime" step="0.01" class="numbersonly" value="3"><br>
+	<label for="tagEndTime">萼片宽度</label><br>
+	<input type="number" id = "tagEndTime" step="0.01" class="numbersonly" value="3"><br>
+	<label for="pl">花瓣长度</label><br>
+	<input type="number" id = "pl" step="0.01" class="numbersonly" value="3"><br>
+	<label for="pw">花瓣宽度</label><br>
+	<input type="number" id = "pw" step="0.01" class="numbersonly" value="3"><br>
 
 
-    <input type="Button" onclick="addTask()" value="求艾莉斯种类" />
-    <div>
+	<input type="Button" onclick="addTask()" value="求艾莉斯种类" />
+	<div>
 		<table id = "tagResult"> </table>
 	</div>
 	<p> 讯息(Message:) <span id = "tagMessage"></span></p><br>
 
-    
-    <py-config>
-      packages = ["scikit-learn","joblib"]
-      [[fetch]]
-      files = ['iris_model.joblib']
-    </py-config>
+	
+	<py-config>
+	  packages = ["scikit-learn","joblib"]
+	  [[fetch]]
+	  files = ['iris_model.joblib']
+	</py-config>
 
-    <py-script>
-from sklearn.datasets import load_iris
-from sklearn.preprocessing import StandardScaler
-from sklearn.neural_network import MLPClassifier
-from joblib import load
+	<py-script>
+	from sklearn.datasets import load_iris
+	from sklearn.preprocessing import StandardScaler
+	from sklearn.neural_network import MLPClassifier
+	from joblib import load
 
+	 
+	def irisprediciton(a,b,c,d):
+		# Preprocess the data
+		scaler = StandardScaler()
+		X = scaler.fit_transform(iris.data)
 
-# Preprocess the data
-scaler = StandardScaler()
-X = scaler.fit_transform(iris.data)
+		# Load the pre-trained model
+		model = load('./iris_model.joblib')
+		# Define a new iris sample to classify
+		new_sample = [[a,b,c,d]]
 
-# Load the pre-trained model
-model = load('./iris_model.joblib')
+		# Preprocess the new sample
+		new_sample = scaler.transform(new_sample)
+		# Predict the class probabilities
+		probabilities = model.predict_proba(new_sample)[0]
 
-
-
-
- 
-def irisprediciton(a,b,c,d):
-    # Define a new iris sample to classify
-    new_sample = [[a,b,c,d]]
-
-    # Preprocess the new sample
-    new_sample = scaler.transform(new_sample)
-	# Predict the class probabilities
-	probabilities = model.predict_proba(new_sample)[0]
-
-	# Predict the class label
-	predicted_class = model.predict(new_sample)[0]
-    # Display the results
-	labels = iris.target_names
-	predicted_label = labels[predicted_class]
-	return [predicted_label,probabilities]
+		# Predict the class label
+		predicted_class = model.predict(new_sample)[0]
+		# Display the results
+		labels = iris.target_names
+		predicted_label = labels[predicted_class]
+		return [predicted_label,probabilities]
 
 
 
 
-    </py-script>
-    <script>
+	</py-script>
+	<script>
 
-    function addTask(){
-      var sl = parseFloat(document.getElementById("tagInitTime").value);
+	function addTask(){
+	  var sl = parseFloat(document.getElementById("tagInitTime").value);
 			var sw = parseFloat(document.getElementById("tagEndTime").value);
 			var pl = parseFloat(document.getElementById("pl").value);
 			var pw = parseFloat(document.getElementById("pw").value);
@@ -103,11 +98,12 @@ def irisprediciton(a,b,c,d):
 				return -1;
 			}
 
-            jsdomath = pyscript.interpreter.globals.get('irisprediciton');
-            console.log(irisprediciton(sl,sw,pl,pw));
+	jsdomath = pyscript.interpreter.globals.get('irisprediciton');
+	console.log(jsdomath(sl,sw,pl,pw));
+	document.getElementById("tagMessage").innerHTML= jsdomath(sl,sw,pl,pw)[0] +" "+jsdomath(sl,sw,pl,pw)[1];
 
 
-    }
-    </script>
+	}
+	</script>
   </body>
 </html>
