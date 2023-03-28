@@ -58,14 +58,17 @@
       new_sample = scaler.transform(new_sample)
       # Predict the class probabilities
       probabilities = model.predict_proba(new_sample)[0]
-
-      print("probabilities",probabilities)
+  
       # Predict the class label
       predicted_class = model.predict(new_sample)[0]
+  
       # Display the results
       labels = iris.target_names
       predicted_label = labels[predicted_class]
-      return [predicted_label,probabilities]
+      print("类型", predicted_label)
+      print("可能性", probabilities)
+      return predicted_label + " 的可能性是 "+ str(probabilities[predicted_class])
+
 
 
 
@@ -103,8 +106,9 @@
 
 
       jsdomath = pyscript.interpreter.globals.get('irisprediciton');
+      const k = jsdomath(sl, sw, pl, pw)
       console.log(jsdomath(sl, sw, pl, pw));
-      document.getElementById("tagMessage").innerHTML = jsdomath(sl, sw, pl, pw)[0] + " " + jsdomath(sl, sw, pl, pw)[1];
+      document.getElementById("tagMessage").innerHTML = k ;
 
 
     }
