@@ -13,13 +13,13 @@
 </head>
 
 <body>
-  <label for="tagInitTime">萼片长度</label><br>
+  <label for="tagInitTime">萼片长度(cm)</label><br>
   <input type="number" id="tagInitTime" step="0.01" class="numbersonly" value="3"><br>
-  <label for="tagEndTime">萼片宽度</label><br>
+  <label for="tagEndTime">萼片宽度(cm)</label><br>
   <input type="number" id="tagEndTime" step="0.01" class="numbersonly" value="3"><br>
-  <label for="pl">花瓣长度</label><br>
+  <label for="pl">花瓣长度(cm)</label><br>
   <input type="number" id="pl" step="0.01" class="numbersonly" value="3"><br>
-  <label for="pw">花瓣宽度</label><br>
+  <label for="pw">花瓣宽度(cm)</label><br>
   <input type="number" id="pw" step="0.01" class="numbersonly" value="3"><br>
 
 
@@ -42,6 +42,7 @@
     from sklearn.neural_network import MLPClassifier
     from joblib import load
 
+    chinesenames = ["塞托萨","杂色虹膜","韦尔吉尼察"]
     iris = load_iris()
     def irisprediciton(a,b,c,d):
       print("inside loadiris function")
@@ -64,10 +65,10 @@
   
       # Display the results
       labels = iris.target_names
+      print(labels)
       predicted_label = labels[predicted_class]
-      print("类型", predicted_label)
-      print("可能性", probabilities)
-      return predicted_label + " 的可能性是 "+ str(probabilities[predicted_class])
+      bla = chinesenames[predicted_class] + " ("+predicted_label + ") 的可能性是 "+ str(probabilities[predicted_class])
+      return bla
 
 
 
@@ -108,7 +109,7 @@
       jsdomath = pyscript.interpreter.globals.get('irisprediciton');
       const k = jsdomath(sl, sw, pl, pw)
       console.log(jsdomath(sl, sw, pl, pw));
-      document.getElementById("tagMessage").innerHTML = k ;
+      document.getElementById("tagMessage").innerHTML = k;
 
 
     }
